@@ -1,0 +1,80 @@
+[gd_scene load_steps=5 format=3 uid="uid://b62qdadmuus8v"]
+
+[ext_resource type="FontFile" uid="uid://dge5wjg2amk7h" path="res://Assets/zhnayuk.ttf" id="1_b5u0c"]
+[ext_resource type="FontFile" uid="uid://brg4pirco4o4j" path="res://Assets/determination.ttf" id="1_xaf41"]
+[ext_resource type="Script" path="res://Scenes/El gato.gd" id="2_oi5c0"]
+[ext_resource type="PackedScene" uid="uid://c0i53txupveat" path="res://Scenes/parallax_background.tscn" id="2_wm013"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxMenu" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -135.0
+offset_top = -97.0
+offset_right = 135.0
+offset_bottom = 97.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="El gato" type="Button" parent="VBoxMenu"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_b5u0c")
+theme_override_font_sizes/font_size = 30
+text = "el gato"
+flat = true
+script = ExtResource("2_oi5c0")
+
+[node name="Gato" type="AudioStreamPlayer2D" parent="VBoxMenu/El gato"]
+
+[node name="VBoxBotones" type="VBoxContainer" parent="VBoxMenu"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="PVP" type="Button" parent="VBoxMenu/VBoxBotones"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.945098, 0.0941176, 1)
+theme_override_fonts/font = ExtResource("1_xaf41")
+theme_override_font_sizes/font_size = 22
+text = "PVP"
+flat = true
+
+[node name="PVE" type="Button" parent="VBoxMenu/VBoxBotones"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.945098, 0, 1)
+theme_override_fonts/font = ExtResource("1_xaf41")
+theme_override_font_sizes/font_size = 22
+text = "PVE"
+flat = true
+
+[node name="Salir" type="Button" parent="VBoxMenu/VBoxBotones"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.945098, 0, 1)
+theme_override_fonts/font = ExtResource("1_xaf41")
+theme_override_font_sizes/font_size = 22
+text = "SALIR
+"
+flat = true
+
+[node name="ParallaxBackground" parent="." instance=ExtResource("2_wm013")]

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://c0i53txupveat"]
+
+[ext_resource type="Texture2D" uid="uid://cpf22wga52rxy" path="res://Sprites/Background.png" id="1_405ay"]
+
+[node name="ParallaxBackground" type="ParallaxBackground"]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
+position = Vector2(180, 180)
+texture = ExtResource("1_405ay")

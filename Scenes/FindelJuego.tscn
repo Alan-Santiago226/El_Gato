@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://cenuufieojy4q"]
+
+[ext_resource type="FontFile" uid="uid://brg4pirco4o4j" path="res://Assets/determination.ttf" id="1_lispw"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Volver" type="Button" parent="."]
+layout_mode = 0
+offset_left = 317.5
+offset_top = 295.0
+offset_right = 403.5
+offset_bottom = 330.0
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.945098, 0, 1)
+theme_override_fonts/font = ExtResource("1_lispw")
+theme_override_font_sizes/font_size = 22
+text = "INICIO"
+flat = true
+
+[node name="Empate" type="Label" parent="."]
+layout_mode = 0
+offset_left = 307.5
+offset_top = 25.0
+offset_right = 412.5
+offset_bottom = 64.0
+theme_override_fonts/font = ExtResource("1_lispw")
+theme_override_font_sizes/font_size = 30
+text = "EMPATE"
