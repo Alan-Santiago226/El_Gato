@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://qr6cwufsdiaq"]
+[gd_scene load_steps=14 format=3 uid="uid://qr6cwufsdiaq"]
 
 [ext_resource type="Script" path="res://Scenes/Modo1.gd" id="1_k8lub"]
 [ext_resource type="PackedScene" uid="uid://8hajeynpsa3s" path="res://Scenes/parallax_background2.tscn" id="1_okt01"]
@@ -8,6 +8,70 @@
 [ext_resource type="Texture2D" uid="uid://ccdfdh5lapkv1" path="res://Sprites/Red_H.png" id="5_3qh8c"]
 [ext_resource type="AudioStream" uid="uid://cm1wd53rr3q2e" path="res://Assets/Modo_1.wav" id="5_6gsdq"]
 [ext_resource type="Texture2D" uid="uid://cwuk1tscmvmwh" path="res://Sprites/Blue_H.png" id="5_r6k41"]
+[ext_resource type="AudioStream" uid="uid://73ak46idmhyh" path="res://Assets/Transicion_efecto.wav" id="7_owtiu"]
+[ext_resource type="AudioStream" uid="uid://bhvihlhfmsm1u" path="res://Assets/Break_H.wav" id="10_lt512"]
+
+[sub_resource type="Animation" id="Animation_4r4os"]
+resource_name = "fade_in"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Transicion/ColorRect:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.30415),
+"transitions": PackedFloat32Array(1.5, 0.00195311),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Transicion/ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.30145),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_7g4kc"]
+resource_name = "fade_out"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Transicion/ColorRect:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.69),
+"transitions": PackedFloat32Array(1, 1.5),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Transicion/ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s71px"]
+_data = {
+"fade_in": SubResource("Animation_4r4os"),
+"fade_out": SubResource("Animation_7g4kc")
+}
 
 [node name="Modo1" type="Node2D"]
 script = ExtResource("1_k8lub")
@@ -122,12 +186,33 @@ theme_override_fonts/font = ExtResource("4_xldgv")
 text = "TU TURNO"
 horizontal_alignment = 1
 
+[node name="Transicion" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_s71px")
+}
+
+[node name="ColorRect" type="ColorRect" parent="Transicion"]
+self_modulate = Color(1, 1, 1, 0)
+offset_right = 720.0
+offset_bottom = 360.0
+
+[node name="Audio_T" type="AudioStreamPlayer" parent="Transicion"]
+stream = ExtResource("7_owtiu")
+
 [node name="ParallaxBackground" parent="." instance=ExtResource("1_okt01")]
+
+[node name="Break" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_lt512")
+volume_db = 7.0
 
 [node name="PVP" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_6gsdq")
 volume_db = -5.0
-autoplay = true
+
+[node name="Temporizador" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
 
 [connection signal="button_up" from="FindelJuego/Volver" to="." method="_on_volver_button_up"]
 [connection signal="button_up" from="Zona/Borde/Fila0/Boton0" to="." method="_on_boton_0_button_up"]
@@ -139,5 +224,6 @@ autoplay = true
 [connection signal="button_up" from="Zona/Borde/Fila2/Boton6" to="." method="_on_boton_6_button_up"]
 [connection signal="button_up" from="Zona/Borde/Fila2/Boton7" to="." method="_on_boton_7_button_up"]
 [connection signal="button_up" from="Zona/Borde/Fila2/Boton8" to="." method="_on_boton_8_button_up"]
+[connection signal="timeout" from="Temporizador" to="." method="_on_temporizador_timeout"]
 
 [editable path="FindelJuego"]

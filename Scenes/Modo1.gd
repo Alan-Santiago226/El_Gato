@@ -1,5 +1,7 @@
 extends Node2D
 
+@onready var transicion = $Transicion
+
 var borde: Array
 var Jugador: String
 var Ganador : bool = false
@@ -65,6 +67,8 @@ func Actualizar_Jugador() -> void:
 			$Inter/EstadoI.hide()
 	
 func _ready() -> void:
+	transicion.play("fade_in")
+	$Transicion/Audio_T.play(1.85)
 	$FindelJuego.hide()
 	iniciar_borde()
 	Iniciar_Jugador()
@@ -119,6 +123,7 @@ func Emparejamiento_Diagonal() -> bool:
 func _process(delta):
 	if Ganador:
 		$PVP.stop()
+		
 
 func Juego_lleno() -> bool:
 	if borde.has("0"):
@@ -128,6 +133,7 @@ func Juego_lleno() -> bool:
 func checar_final() -> void:
 	if Emparejamiento_Fila() || Emparejamiento_Columna() || Emparejamiento_Diagonal():
 		Final = true
+		$Break.play(0.33)
 		Volver_Inicio()
 	elif Juego_lleno():
 		Final = true
@@ -218,3 +224,7 @@ func _on_boton_8_button_up() -> void:
 
 func _on_volver_button_up() -> void:
 	get_tree().change_scene_to_file("res://Scenes/menu.tscn")
+
+
+func _on_temporizador_timeout():
+	$PVP.play()

@@ -1,10 +1,73 @@
-[gd_scene load_steps=6 format=3 uid="uid://b62qdadmuus8v"]
+[gd_scene load_steps=10 format=3 uid="uid://b62qdadmuus8v"]
 
 [ext_resource type="FontFile" uid="uid://dge5wjg2amk7h" path="res://Assets/zhnayuk.ttf" id="1_b5u0c"]
 [ext_resource type="Script" path="res://Scenes/menu.gd" id="1_udsuj"]
 [ext_resource type="FontFile" uid="uid://brg4pirco4o4j" path="res://Assets/determination.ttf" id="1_xaf41"]
 [ext_resource type="PackedScene" uid="uid://8hajeynpsa3s" path="res://Scenes/parallax_background2.tscn" id="4_o1pq8"]
 [ext_resource type="AudioStream" uid="uid://cw2h1wdi6i6c8" path="res://Assets/Start_Menu.wav" id="5_vhdka"]
+[ext_resource type="AudioStream" uid="uid://73ak46idmhyh" path="res://Assets/Transicion_efecto.wav" id="6_28fdh"]
+
+[sub_resource type="Animation" id="Animation_4r4os"]
+resource_name = "fade_in"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Transicion/ColorRect:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.30415),
+"transitions": PackedFloat32Array(1.5, 0.00195311),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Transicion/ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.30145),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_7g4kc"]
+resource_name = "fade_out"
+length = 1.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Transicion/ColorRect:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.69),
+"transitions": PackedFloat32Array(1, 1.5),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Transicion/ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s71px"]
+_data = {
+"fade_in": SubResource("Animation_4r4os"),
+"fade_out": SubResource("Animation_7g4kc")
+}
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -84,7 +147,22 @@ flat = true
 stream = ExtResource("5_vhdka")
 autoplay = true
 
+[node name="Transicion" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_s71px")
+}
+
+[node name="ColorRect" type="ColorRect" parent="Transicion"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+offset_right = 720.0
+offset_bottom = 360.0
+
+[node name="Audio_T" type="AudioStreamPlayer" parent="Transicion"]
+stream = ExtResource("6_28fdh")
+
 [connection signal="pressed" from="VBoxMenu/El gato" to="." method="_on_el_gato_pressed"]
 [connection signal="pressed" from="VBoxMenu/VBoxBotones/PVP" to="." method="_on_pvp_pressed"]
 [connection signal="pressed" from="VBoxMenu/VBoxBotones/PVE" to="." method="_on_pve_pressed"]
 [connection signal="pressed" from="VBoxMenu/VBoxBotones/Salir" to="." method="_on_salir_pressed"]
+[connection signal="animation_finished" from="Transicion" to="." method="_on_transicion_animation_finished"]
