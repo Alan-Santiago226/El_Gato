@@ -1,15 +1,15 @@
-[gd_scene load_steps=14 format=3 uid="uid://qr6cwufsdiaq"]
+[gd_scene load_steps=14 format=3 uid="uid://cwqol8psh61xc"]
 
-[ext_resource type="Script" path="res://Scenes/Modo1.gd" id="1_k8lub"]
-[ext_resource type="PackedScene" uid="uid://8hajeynpsa3s" path="res://Scenes/parallax_background2.tscn" id="1_okt01"]
-[ext_resource type="Texture2D" uid="uid://bhvvw1ehudtft" path="res://Sprites/Zona.png" id="3_smhha"]
-[ext_resource type="PackedScene" uid="uid://cenuufieojy4q" path="res://Scenes/FindelJuego.tscn" id="4_052if"]
-[ext_resource type="FontFile" uid="uid://brg4pirco4o4j" path="res://Assets/determination.ttf" id="4_xldgv"]
-[ext_resource type="Texture2D" uid="uid://ccdfdh5lapkv1" path="res://Sprites/Red_H.png" id="5_3qh8c"]
-[ext_resource type="AudioStream" uid="uid://cm1wd53rr3q2e" path="res://Assets/Modo_1.wav" id="5_6gsdq"]
-[ext_resource type="Texture2D" uid="uid://cwuk1tscmvmwh" path="res://Sprites/Blue_H.png" id="5_r6k41"]
-[ext_resource type="AudioStream" uid="uid://73ak46idmhyh" path="res://Assets/Transicion_efecto.wav" id="7_owtiu"]
-[ext_resource type="AudioStream" uid="uid://bhvihlhfmsm1u" path="res://Assets/Break_H.wav" id="10_lt512"]
+[ext_resource type="Script" path="res://Scenes/Modo2.gd" id="1_kdcn7"]
+[ext_resource type="PackedScene" uid="uid://cenuufieojy4q" path="res://Scenes/FindelJuego.tscn" id="1_t6yo5"]
+[ext_resource type="Texture2D" uid="uid://bhvvw1ehudtft" path="res://Sprites/Zona.png" id="2_cu050"]
+[ext_resource type="PackedScene" uid="uid://8hajeynpsa3s" path="res://Scenes/parallax_background2.tscn" id="2_y7nro"]
+[ext_resource type="FontFile" uid="uid://brg4pirco4o4j" path="res://Assets/determination.ttf" id="3_l6j4i"]
+[ext_resource type="Texture2D" uid="uid://ccdfdh5lapkv1" path="res://Sprites/Red_H.png" id="4_b3sq4"]
+[ext_resource type="Texture2D" uid="uid://cwuk1tscmvmwh" path="res://Sprites/Blue_H.png" id="5_gkuwn"]
+[ext_resource type="AudioStream" uid="uid://73ak46idmhyh" path="res://Assets/Transicion_efecto.wav" id="8_fhppn"]
+[ext_resource type="AudioStream" uid="uid://bhvihlhfmsm1u" path="res://Assets/Break_H.wav" id="9_qh2ce"]
+[ext_resource type="AudioStream" uid="uid://cm1wd53rr3q2e" path="res://Assets/Modo_1.wav" id="10_uy77a"]
 
 [sub_resource type="Animation" id="Animation_4r4os"]
 resource_name = "fade_in"
@@ -73,14 +73,14 @@ _data = {
 "fade_out": SubResource("Animation_7g4kc")
 }
 
-[node name="Modo1" type="Node2D"]
-script = ExtResource("1_k8lub")
+[node name="Modo2" type="Node2D"]
+script = ExtResource("1_kdcn7")
 
-[node name="FindelJuego" parent="." instance=ExtResource("4_052if")]
+[node name="FindelJuego" parent="." instance=ExtResource("1_t6yo5")]
 
 [node name="Zona" type="Sprite2D" parent="."]
 position = Vector2(360, 180)
-texture = ExtResource("3_smhha")
+texture = ExtResource("2_cu050")
 
 [node name="Borde" type="VBoxContainer" parent="Zona"]
 anchors_preset = 8
@@ -143,48 +143,43 @@ layout_mode = 2
 offset_left = 520.0
 offset_top = 100.0
 offset_right = 643.0
-offset_bottom = 140.0
+offset_bottom = 184.0
 
 [node name="Label" type="Label" parent="Deter"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4_xldgv")
+theme_override_fonts/font = ExtResource("3_l6j4i")
 text = "DETERMINACION"
 
 [node name="TextureRect" type="TextureRect" parent="Deter"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture = ExtResource("5_3qh8c")
+texture = ExtResource("4_b3sq4")
 stretch_mode = 2
 
 [node name="EstadoD" type="Label" parent="Deter"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4_xldgv")
+theme_override_fonts/font = ExtResource("3_l6j4i")
 text = "TU TURNO"
 horizontal_alignment = 1
 
-[node name="Inter" type="VBoxContainer" parent="."]
+[node name="Cat" type="VBoxContainer" parent="."]
 offset_left = 100.0
 offset_top = 100.0
-offset_right = 140.0
-offset_bottom = 140.0
+offset_right = 194.0
+offset_bottom = 184.0
 
-[node name="Label" type="Label" parent="Inter"]
+[node name="Label" type="Label" parent="Cat"]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4_xldgv")
-text = "INTEGRIDAD"
+theme_override_fonts/font = ExtResource("3_l6j4i")
+text = "GATO"
+horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="Inter"]
+[node name="TextureRect" type="TextureRect" parent="Cat"]
 layout_mode = 2
 size_flags_horizontal = 4
-texture = ExtResource("5_r6k41")
+texture = ExtResource("5_gkuwn")
 stretch_mode = 2
-
-[node name="EstadoI" type="Label" parent="Inter"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_xldgv")
-text = "TU TURNO"
-horizontal_alignment = 1
 
 [node name="Transicion" type="AnimationPlayer" parent="."]
 libraries = {
@@ -198,16 +193,16 @@ offset_right = 720.0
 offset_bottom = 360.0
 
 [node name="Audio_T" type="AudioStreamPlayer" parent="Transicion"]
-stream = ExtResource("7_owtiu")
+stream = ExtResource("8_fhppn")
 
-[node name="ParallaxBackground" parent="." instance=ExtResource("1_okt01")]
+[node name="ParallaxBackground" parent="." instance=ExtResource("2_y7nro")]
 
 [node name="Break" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("10_lt512")
+stream = ExtResource("9_qh2ce")
 volume_db = 7.0
 
 [node name="PVP" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("5_6gsdq")
+stream = ExtResource("10_uy77a")
 volume_db = -5.0
 
 [node name="Temporizador" type="Timer" parent="."]
