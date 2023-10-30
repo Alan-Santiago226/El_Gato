@@ -13,6 +13,8 @@ var mejor_movimiento : int
 var puntaje : int
 const INF = 10000
 
+var solucion : bool = true
+
 var Esperando = load("res://Sprites/Idle.png")
 var Determinacion = load("res://Sprites/Cross.png")
 var Gato = load("res://Sprites/Circle.png")
@@ -272,6 +274,8 @@ func Minimax(jugador: String) -> int:
 		# Prioridad: Centro, esquinas y luego aleatorio.
 		elif borde[4] == "0":
 			mejor_movimiento = 4
+		elif borde[2] == "Determinacion" && borde[5] == "Determinacion":
+			mejor_movimiento = 8
 		#elif borde[0] == "0":
 		#	mejor_movimiento = 0
 		#elif borde[2] == "0":
@@ -345,24 +349,32 @@ func MovimientoComputadora() -> void:
 	print("9")
 	mejor_puntaje = -INF
 	mejor_movimiento = -1
-	
-	for i in range(9):
-		if borde[i] == "0":
-			borde[i] = "Gato"
-			puntaje = Minimax("Determinacion")
-			borde[i] = "0"
-			if puntaje >= 1:
-				#print("puntaje mayor: ", puntaje)
-				mejor_movimiento = i
-				break
-				#Movimientos_Validos.append(i)
-				#if puntaje <= -1:
-				#	break
-			elif puntaje == 0:
-				mejor_movimiento = i
-				break
-			#print(puntaje, " ", i, " ", mejor_puntaje)
-				#print("mejor_movimiento")
+	## EXCEPCIONES
+	if borde[2] == "Determinacion" && borde[5] == "Determinacion" && solucion == true:
+		mejor_movimiento = 8
+		solucion = false
+	elif borde[8] == "Determinacion" && borde[6] == "Determinacion" && solucion == true:
+		mejor_movimiento = 7
+		solucion = false 
+	## EXCEPCIONES
+	else:
+		for i in range(9):
+			if borde[i] == "0":
+				borde[i] = "Gato"
+				puntaje = Minimax("Determinacion")
+				borde[i] = "0"
+				if puntaje == 1:
+					#print("puntaje mayor: ", puntaje)
+					mejor_movimiento = i
+					break
+					#Movimientos_Validos.append(i)
+					#if puntaje <= -1:
+					#	break
+				elif puntaje == 0:
+					mejor_movimiento = i
+					break
+				#print(puntaje, " ", i, " ", mejor_puntaje)
+					#print("mejor_movimiento")
 	
 	if mejor_movimiento >= 0:
 		print(mejor_puntaje, " Mejor puntaje")
