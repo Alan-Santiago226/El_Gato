@@ -244,6 +244,8 @@ func Minimax(jugador: String) -> int:
 	if jugador == "Gato":
 		mejor_puntaje = -INF
 		mejor_movimiento = -1
+		var movimientos_validos = []
+
 		for i in range(9):
 			if borde[i] == "0":
 				borde[i] = "Gato"
@@ -252,25 +254,10 @@ func Minimax(jugador: String) -> int:
 				mejor_puntaje = max(puntaje, mejor_puntaje)
 				if puntaje == 1:
 					break
-					#mejor_movimiento = i
-		return mejor_puntaje
-	else:
-		mejor_puntaje = INF
-		mejor_movimiento = -1
-		var movimientos_validos = []
-		for i in range(9):
-			if borde[i] == "0":
-				borde[i] = "Determinacion"
-				puntaje = Minimax("Gato")
-				borde[i] = "0"
-				mejor_puntaje = min(puntaje, mejor_puntaje)
-				if puntaje == -1:
-					break
 				elif puntaje == 0:
-					break
-					#mejor_puntaje = puntaje
-					#mejor_movimiento = i
-		#Priorizar: Bloquear al jugador o ganar.
+					movimientos_validos.append(i)
+
+		# Prioridad: Bloquear victoria de "Determinacion" o ganar.
 		if len(movimientos_validos) > 0:
 			mejor_movimiento = movimientos_validos[0]
 		elif mejor_puntaje == 1:
@@ -282,7 +269,7 @@ func Minimax(jugador: String) -> int:
 					borde[i] = "0"
 					if mejor_movimiento >= 0:
 						break
-		# Priorizar: Centro, esquinas
+		# Prioridad: Centro, esquinas y luego aleatorio.
 		elif borde[4] == "0":
 			mejor_movimiento = 4
 		elif borde[0] == "0":
@@ -294,19 +281,49 @@ func Minimax(jugador: String) -> int:
 		elif borde[8] == "0":
 			mejor_movimiento = 8
 		else:
-			var esquinas = []
-			for i in [0, 2 ,6 , 8]:
+			var esquinas_disponibles = []
+			for i in [0, 2, 6, 8]:
 				if borde[i] == "0":
-					esquinas.append(i)
-			if len(esquinas) > 0:
-				mejor_movimiento = esquinas[randi() % len(esquinas)]
+					esquinas_disponibles.append(i)
+			if len(esquinas_disponibles) > 0:
+				mejor_movimiento = esquinas_disponibles[randi() % len(esquinas_disponibles)]
 			else:
-				var movimiento_libres = []
-				for i in range (9):
+				var movimientos_libres = []
+				for i in range(9):
 					if borde[i] == "0":
-						movimiento_libres.append(i)
-				mejor_movimiento = movimiento_libres[randi() % len(movimiento_libres)]
-		
+						movimientos_libres.append(i)
+				mejor_movimiento = movimientos_libres[randi() % len(movimientos_libres)]
+
+		return mejor_puntaje
+	else:
+		mejor_puntaje = INF
+		mejor_movimiento = -1
+		var movimientos_validos = []
+
+		for i in range(9):
+			if borde[i] == "0":
+				borde[i] = "Determinacion"
+				puntaje = Minimax("Gato")
+				borde[i] = "0"
+				mejor_puntaje = min(puntaje, mejor_puntaje)
+				if puntaje == -1:
+					break
+				elif puntaje == 0:
+					movimientos_validos.append(i)
+
+		# Prioridad: Bloquear victoria de "Gato" o ganar.
+		if len(movimientos_validos) > 0:
+			mejor_movimiento = movimientos_validos[0]
+		elif mejor_puntaje == -1:
+			for i in range(9):
+				if borde[i] == "0":
+					borde[i] = "Determinacion"
+					if JugadorGana("Determinacion"):
+						mejor_movimiento = i
+					borde[i] = "0"
+					if mejor_movimiento >= 0:
+						break
+
 		return mejor_puntaje
 
 func MovimientoComputadora() -> void:
