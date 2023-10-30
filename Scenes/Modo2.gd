@@ -257,6 +257,7 @@ func Minimax(jugador: String) -> int:
 	else:
 		mejor_puntaje = INF
 		mejor_movimiento = -1
+		var movimientos_validos = []
 		for i in range(9):
 			if borde[i] == "0":
 				borde[i] = "Determinacion"
@@ -265,19 +266,53 @@ func Minimax(jugador: String) -> int:
 				mejor_puntaje = min(puntaje, mejor_puntaje)
 				if puntaje == -1:
 					break
+				elif puntaje == 0:
+					break
 					#mejor_puntaje = puntaje
 					#mejor_movimiento = i
+		#Priorizar: Bloquear al jugador o ganar.
+		if len(movimientos_validos) > 0:
+			mejor_movimiento = movimientos_validos[0]
+		elif mejor_puntaje == 1:
+			for i in range(9):
+				if borde[i] == "0":
+					borde[i] = "Gato"
+					if JugadorGana("Gato"):
+						mejor_movimiento = i
+					borde[i] = "0"
+					if mejor_movimiento >= 0:
+						break
+		# Priorizar: Centro, esquinas
+		elif borde[4] == "0":
+			mejor_movimiento = 4
+		elif borde[0] == "0":
+			mejor_movimiento = 0
+		elif borde[2] == "0":
+			mejor_movimiento = 2
+		elif borde[6] == "0":
+			mejor_movimiento = 6
+		elif borde[8] == "0":
+			mejor_movimiento = 8
+		else:
+			var esquinas = []
+			for i in [0, 2 ,6 , 8]:
+				if borde[i] == "0":
+					esquinas.append(i)
+			if len(esquinas) > 0:
+				mejor_movimiento = esquinas[randi() % len(esquinas)]
+			else:
+				var movimiento_libres = []
+				for i in range (9):
+					if borde[i] == "0":
+						movimiento_libres.append(i)
+				mejor_movimiento = movimiento_libres[randi() % len(movimiento_libres)]
+		
 		return mejor_puntaje
 
 func MovimientoComputadora() -> void:
 	print("9")
 	mejor_puntaje = -INF
 	mejor_movimiento = -1
-	
-	var movimientos_validos = []
-	
-	if JugadorGana("Gato"):
-		return
 	
 	for i in range(9):
 		if borde[i] == "0":
@@ -294,12 +329,8 @@ func MovimientoComputadora() -> void:
 			elif puntaje == 0:
 				mejor_movimiento = i
 				break
-			elif puntaje <= -1:
-				movimientos_validos.append(i)
-			print(puntaje, " ", i, " ", mejor_puntaje)
+			#print(puntaje, " ", i, " ", mejor_puntaje)
 				#print("mejor_movimiento")
-	if len(movimientos_validos) > 0 and puntaje < 0:
-		mejor_movimiento = movimientos_validos[randi() % len(movimientos_validos)]
 	
 	if mejor_movimiento >= 0:
 		print(mejor_puntaje, " Mejor puntaje")
