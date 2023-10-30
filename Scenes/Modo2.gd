@@ -11,6 +11,7 @@ var Empate : bool = false
 var mejor_puntaje : int
 var mejor_movimiento : int
 var puntaje : int
+const INF = 10000
 
 var Esperando = load("res://Sprites/Idle.png")
 var Determinacion = load("res://Sprites/Cross.png")
@@ -60,6 +61,7 @@ func Actualizar_Jugador() -> void:
 	else:
 		Computadora = false
 		if Ganador == true:
+			$Deter/EstadoD.show()
 			$Deter/EstadoD.text = "PERDISTE"
 			$Deter/TextureRect.texture = D_Pierde
 		elif Empate == true:
@@ -247,9 +249,10 @@ func Minimax(jugador: String) -> int:
 				borde[i] = "Gato"
 				puntaje = Minimax("Determinacion")
 				borde[i] = "0"
-				if puntaje > mejor_puntaje:
-					mejor_puntaje = puntaje
-					mejor_movimiento = i
+				mejor_puntaje = max(puntaje, mejor_puntaje)
+				if puntaje == 1:
+					break
+					#mejor_movimiento = i
 		return mejor_puntaje
 	else:
 		mejor_puntaje = INF
@@ -259,9 +262,11 @@ func Minimax(jugador: String) -> int:
 				borde[i] = "Determinacion"
 				puntaje = Minimax("Gato")
 				borde[i] = "0"
-				if puntaje < mejor_puntaje:
-					mejor_puntaje = puntaje
-					mejor_movimiento = i
+				mejor_puntaje = min(puntaje, mejor_puntaje)
+				if puntaje == -1:
+					break
+					#mejor_puntaje = puntaje
+					#mejor_movimiento = i
 		return mejor_puntaje
 
 func MovimientoComputadora() -> void:
@@ -269,20 +274,37 @@ func MovimientoComputadora() -> void:
 	mejor_puntaje = -INF
 	mejor_movimiento = -1
 	
+	var movimientos_validos = []
+	
+	if JugadorGana("Gato"):
+		return
+	
 	for i in range(9):
 		if borde[i] == "0":
 			borde[i] = "Gato"
-			puntaje = Minimax("Gato")
+			puntaje = Minimax("Determinacion")
 			borde[i] = "0"
-			if puntaje > mejor_puntaje:
-				mejor_puntaje = puntaje
+			if puntaje >= 1:
+				#print("puntaje mayor: ", puntaje)
 				mejor_movimiento = i
-			elif mejor_puntaje <= 0:
+				break
+				#Movimientos_Validos.append(i)
+				#if puntaje <= -1:
+				#	break
+			elif puntaje == 0:
 				mejor_movimiento = i
-		print(puntaje, " ", i)
-	print(mejor_puntaje, " Mejor puntaje")
-	print(mejor_movimiento," Mejor movimiento")
+				break
+			elif puntaje <= -1:
+				movimientos_validos.append(i)
+			print(puntaje, " ", i, " ", mejor_puntaje)
+				#print("mejor_movimiento")
+	if len(movimientos_validos) > 0 and puntaje < 0:
+		mejor_movimiento = movimientos_validos[randi() % len(movimientos_validos)]
+	
 	if mejor_movimiento >= 0:
+		print(mejor_puntaje, " Mejor puntaje")
+		print(mejor_movimiento," Mejor movimiento")
+	#if mejor_movimiento >= 0:
 		borde[mejor_movimiento] = "Gato"
 		var path : String
 		for i in range(9):
@@ -293,6 +315,7 @@ func MovimientoComputadora() -> void:
 			elif (i >= 6 && i <= 8) && mejor_movimiento == i:
 				path = "Zona/Borde/Fila2/Boton" + str(i)	
 		get_node(path).texture_normal = Gato
+		checar_final()
 		Actualizar_Jugador()
 
 func JugadorGana(jugador: String) -> bool:
