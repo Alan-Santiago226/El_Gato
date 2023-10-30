@@ -272,14 +272,14 @@ func Minimax(jugador: String) -> int:
 		# Prioridad: Centro, esquinas y luego aleatorio.
 		elif borde[4] == "0":
 			mejor_movimiento = 4
-		elif borde[0] == "0":
-			mejor_movimiento = 0
-		elif borde[2] == "0":
-			mejor_movimiento = 2
-		elif borde[6] == "0":
-			mejor_movimiento = 6
-		elif borde[8] == "0":
-			mejor_movimiento = 8
+		#elif borde[0] == "0":
+		#	mejor_movimiento = 0
+		#elif borde[2] == "0":
+		#	mejor_movimiento = 2
+		#elif borde[6] == "0":
+		#	mejor_movimiento = 6
+		#elif borde[8] == "0":
+		#	mejor_movimiento = 8
 		else:
 			var esquinas_disponibles = []
 			for i in [0, 2, 6, 8]:
@@ -323,6 +323,21 @@ func Minimax(jugador: String) -> int:
 					borde[i] = "0"
 					if mejor_movimiento >= 0:
 						break
+		elif borde[4] == "0":
+			mejor_movimiento = 4
+		else:
+			var esquinas_disponibles = []
+			for i in [0, 2, 6, 8]:
+				if borde[i] == "0":
+					esquinas_disponibles.append(i)
+			if len(esquinas_disponibles) > 0:
+				mejor_movimiento = esquinas_disponibles[randi() % len(esquinas_disponibles)]
+			else:
+				var movimientos_libres = []
+				for i in range(9):
+					if borde[i] == "0":
+						movimientos_libres.append(i)
+				mejor_movimiento = movimientos_libres[randi() % len(movimientos_libres)]
 
 		return mejor_puntaje
 
