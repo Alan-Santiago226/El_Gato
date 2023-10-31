@@ -68,7 +68,7 @@ func Actualizar_Jugador() -> void:
 	
 func _ready() -> void:
 	transicion.play("fade_in")
-	$Transicion/Audio_T.play(1.85)
+	$Transicion/Audio_T.play(1.9)
 	$FindelJuego.hide()
 	iniciar_borde()
 	Iniciar_Jugador()
@@ -121,7 +121,7 @@ func Emparejamiento_Diagonal() -> bool:
 	return false
 	
 func _process(delta):
-	if Ganador:
+	if Ganador || Empate:
 		$PVP.stop()
 		
 
@@ -143,6 +143,7 @@ func checar_final() -> void:
 func Volver_Inicio() -> void:
 	if Empate:
 		$FindelJuego.show()
+		$Draw.play()
 	else:
 		$FindelJuego.show()
 		$FindelJuego/Empate.hide()
@@ -221,10 +222,11 @@ func _on_boton_8_button_up() -> void:
 		Movimiento(8)
 		Actualizar_borde(2,8)
 
-
 func _on_volver_button_up() -> void:
 	get_tree().change_scene_to_file("res://Scenes/menu.tscn")
 
-
 func _on_temporizador_timeout():
 	$PVP.play()
+
+func _on_reiniciar_button_up():
+	get_tree().reload_current_scene()

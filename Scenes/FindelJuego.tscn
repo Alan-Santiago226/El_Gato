@@ -34,7 +34,7 @@ theme_override_fonts/font = ExtResource("1_lispw")
 theme_override_font_sizes/font_size = 30
 text = "EMPATE"
 
-[node name="Button" type="Button" parent="."]
+[node name="Reiniciar" type="Button" parent="."]
 layout_mode = 0
 offset_left = 318.0
 offset_top = 330.0

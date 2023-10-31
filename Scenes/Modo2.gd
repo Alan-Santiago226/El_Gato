@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var transicion = $Transicion
 
-var borde : Array
+var borde : Array 
 var Jugador : String
 var Computadora : bool = false
 var Ganador : bool = false
@@ -20,7 +20,8 @@ var Determinacion = load("res://Sprites/Cross.png")
 var Gato = load("res://Sprites/Circle.png")
 
 var D_Pierde = load("res://Sprites/Red_H_br.png")
-var I_Pierde = load("res://Sprites/Blue_H_br.png")
+var Gato_Pierde = load("res://Sprites/Gato_Lose.png")
+var Gato_Gana = load("res://Sprites/Gato_Win.png")
 
 
 func iniciar_borde()-> void:
@@ -52,10 +53,11 @@ func Actualizar_Jugador() -> void:
 	print("Cambio de jugador")
 	if Jugador == "Determinacion":
 		if Ganador == true:
-			$Cat/TextureRect.texture = I_Pierde
+			$Cat/TextureRect.texture = Gato_Pierde
 			$Deter/EstadoD.text = "GANASTE"
 		elif Empate == true:
 			$Deter/EstadoD.hide()
+			
 		else:
 			Jugador = "Gato"
 			Computadora = true
@@ -66,6 +68,8 @@ func Actualizar_Jugador() -> void:
 			$Deter/EstadoD.show()
 			$Deter/EstadoD.text = "PERDISTE"
 			$Deter/TextureRect.texture = D_Pierde
+			$Cat/TextureRect.texture = Gato_Gana
+			$Draw.play()
 		elif Empate == true:
 			$Deter/EstadoD.hide()
 		else:
@@ -74,7 +78,7 @@ func Actualizar_Jugador() -> void:
 	
 func _ready() -> void:
 	transicion.play("fade_in")
-	$Transicion/Audio_T.play(1.85)
+	$Transicion/Audio_T.play(1.9)
 	$FindelJuego.hide()
 	iniciar_borde()
 	Iniciar_Jugador()
@@ -128,8 +132,8 @@ func Emparejamiento_Diagonal() -> bool:
 	return false
 	
 func _process(delta):
-	if Ganador:
-		$PVP.stop()
+	if Ganador || Empate:
+		$PVE.stop()
 
 func Juego_lleno() -> bool:
 	if borde.has("0"):
@@ -149,6 +153,8 @@ func checar_final() -> void:
 func Volver_Inicio() -> void:
 	if Empate:
 		$FindelJuego.show()
+		$Cat/TextureRect.texture = Gato_Gana
+		$Draw.play()
 	else:
 		$FindelJuego.show()
 		$FindelJuego/Empate.hide()
@@ -411,4 +417,8 @@ func JuegoEmpate() -> bool:
 	return true  
 
 func _on_temporizador_timeout():
-	$PVP.play()
+	$PVE.play()
+
+
+func _on_reiniciar_button_up():
+	get_tree().reload_current_scene()

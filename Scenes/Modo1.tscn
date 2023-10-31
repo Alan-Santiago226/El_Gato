@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://qr6cwufsdiaq"]
+[gd_scene load_steps=15 format=3 uid="uid://qr6cwufsdiaq"]
 
 [ext_resource type="Script" path="res://Scenes/Modo1.gd" id="1_k8lub"]
 [ext_resource type="PackedScene" uid="uid://8hajeynpsa3s" path="res://Scenes/parallax_background2.tscn" id="1_okt01"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cwuk1tscmvmwh" path="res://Sprites/Blue_H.png" id="5_r6k41"]
 [ext_resource type="AudioStream" uid="uid://73ak46idmhyh" path="res://Assets/Transicion_efecto.wav" id="7_owtiu"]
 [ext_resource type="AudioStream" uid="uid://bhvihlhfmsm1u" path="res://Assets/Break_H.wav" id="10_lt512"]
+[ext_resource type="AudioStream" uid="uid://mwuv2rofd6nb" path="res://Assets/Empate.wav" id="11_ha75f"]
 
 [sub_resource type="Animation" id="Animation_4r4os"]
 resource_name = "fade_in"
@@ -209,12 +210,17 @@ volume_db = 7.0
 stream = ExtResource("5_6gsdq")
 volume_db = -5.0
 
+[node name="Draw" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_ha75f")
+volume_db = -5.0
+
 [node name="Temporizador" type="Timer" parent="."]
 wait_time = 2.0
 one_shot = true
 autostart = true
 
 [connection signal="button_up" from="FindelJuego/Volver" to="." method="_on_volver_button_up"]
+[connection signal="button_up" from="FindelJuego/Reiniciar" to="." method="_on_reiniciar_button_up"]
 [connection signal="button_up" from="Zona/Borde/Fila0/Boton0" to="." method="_on_boton_0_button_up"]
 [connection signal="button_up" from="Zona/Borde/Fila0/Boton1" to="." method="_on_boton_1_button_up"]
 [connection signal="button_up" from="Zona/Borde/Fila0/Boton2" to="." method="_on_boton_2_button_up"]
