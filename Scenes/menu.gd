@@ -7,7 +7,7 @@ var PVP = false
 var PVE = false
 
 func _on_el_gato_pressed():
-	pass # Replace with function body.
+	$ID.show()
 
 
 func _on_pvp_pressed():

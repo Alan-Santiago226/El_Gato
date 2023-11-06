@@ -161,6 +161,17 @@ offset_bottom = 360.0
 [node name="Audio_T" type="AudioStreamPlayer" parent="Transicion"]
 stream = ExtResource("6_28fdh")
 
+[node name="ID" type="Label" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 10.0
+offset_top = 335.0
+offset_right = 76.0
+offset_bottom = 358.0
+theme_override_fonts/font = ExtResource("1_xaf41")
+text = "1909997"
+vertical_alignment = 1
+
 [connection signal="pressed" from="VBoxMenu/El gato" to="." method="_on_el_gato_pressed"]
 [connection signal="pressed" from="VBoxMenu/VBoxBotones/PVP" to="." method="_on_pvp_pressed"]
 [connection signal="pressed" from="VBoxMenu/VBoxBotones/PVE" to="." method="_on_pve_pressed"]

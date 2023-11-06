@@ -120,7 +120,7 @@ func Emparejamiento_Diagonal() -> bool:
 		return true	
 	return false
 	
-func _process(delta):
+func _process(_delta):
 	if Ganador || Empate:
 		$PVP.stop()
 		

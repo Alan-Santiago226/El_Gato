@@ -131,7 +131,7 @@ func Emparejamiento_Diagonal() -> bool:
 		return true	
 	return false
 	
-func _process(delta):
+func _process(_delta):
 	if Ganador || Empate:
 		$PVE.stop()
 
@@ -261,27 +261,29 @@ func Minimax(jugador: String) -> int:
 				borde[i] = "0"
 				mejor_puntaje = max(puntaje, mejor_puntaje)
 				if puntaje == 1:
+					mejor_movimiento = i
 					break
 				elif puntaje == 0:
 					movimientos_validos.append(i)
 
 		# Prioridad: Bloquear victoria de "Determinacion" o ganar.
-		if len(movimientos_validos) > 0:
-			mejor_movimiento = movimientos_validos[0]
-		elif mejor_puntaje == 1:
-			for i in range(9):
-				if borde[i] == "0":
-					borde[i] = "Gato"
-					if JugadorGana("Gato"):
-						mejor_movimiento = i
-					borde[i] = "0"
-					if mejor_movimiento >= 0:
-						break
+		if mejor_movimiento < 0:
+			if len(movimientos_validos) > 0:
+				mejor_movimiento = movimientos_validos[0]
+			elif mejor_puntaje == 1:
+				for i in range(9):
+					if borde[i] == "0":
+						borde[i] = "Gato"
+						if JugadorGana("Gato"):
+							mejor_movimiento = i
+						borde[i] = "0"
+						if mejor_movimiento >= 0:
+							break
 		# Prioridad: Centro, esquinas y luego aleatorio.
 		elif borde[4] == "0":
 			mejor_movimiento = 4
-		elif borde[2] == "Determinacion" && borde[5] == "Determinacion":
-			mejor_movimiento = 8
+		#elif borde[2] == "Determinacion" && borde[5] == "Determinacion":
+		#	mejor_movimiento = 8
 		#elif borde[0] == "0":
 		#	mejor_movimiento = 0
 		#elif borde[2] == "0":
@@ -292,16 +294,15 @@ func Minimax(jugador: String) -> int:
 		#	mejor_movimiento = 8
 		else:
 			var esquinas_disponibles = []
-			for i in [0, 2, 6, 8]:
+			var movimientos_libres = []
+			for i in range(9):
 				if borde[i] == "0":
-					esquinas_disponibles.append(i)
-			if len(esquinas_disponibles) > 0:
+					movimientos_libres.append(i)
+					if i % 2 == 0 && i != 4:
+						esquinas_disponibles.append(i)
+			if esquinas_disponibles.size() > 0:
 				mejor_movimiento = esquinas_disponibles[randi() % len(esquinas_disponibles)]
 			else:
-				var movimientos_libres = []
-				for i in range(9):
-					if borde[i] == "0":
-						movimientos_libres.append(i)
 				mejor_movimiento = movimientos_libres[randi() % len(movimientos_libres)]
 
 		return mejor_puntaje
@@ -317,36 +318,37 @@ func Minimax(jugador: String) -> int:
 				borde[i] = "0"
 				mejor_puntaje = min(puntaje, mejor_puntaje)
 				if puntaje == -1:
+					mejor_movimiento = i
 					break
 				elif puntaje == 0:
 					movimientos_validos.append(i)
 
 		# Prioridad: Bloquear victoria de "Gato" o ganar.
-		if len(movimientos_validos) > 0:
-			mejor_movimiento = movimientos_validos[0]
-		elif mejor_puntaje == -1:
-			for i in range(9):
-				if borde[i] == "0":
-					borde[i] = "Determinacion"
-					if JugadorGana("Determinacion"):
-						mejor_movimiento = i
-					borde[i] = "0"
-					if mejor_movimiento >= 0:
-						break
+		if mejor_movimiento < 0:
+			if len(movimientos_validos) > 0:
+				mejor_movimiento = movimientos_validos[0]
+			elif mejor_puntaje == -1:
+				for i in range(9):
+					if borde[i] == "0":
+						borde[i] = "Determinacion"
+						if JugadorGana("Determinacion"):
+							mejor_movimiento = i
+						borde[i] = "0"
+						if mejor_movimiento >= 0:
+							break
 		elif borde[4] == "0":
 			mejor_movimiento = 4
 		else:
 			var esquinas_disponibles = []
-			for i in [0, 2, 6, 8]:
+			var movimientos_libres = []
+			for i in range(9):
 				if borde[i] == "0":
-					esquinas_disponibles.append(i)
-			if len(esquinas_disponibles) > 0:
+					movimientos_libres.append(i)
+					if i % 2 == 0 && i != 4:
+						esquinas_disponibles.append(i)
+			if esquinas_disponibles:
 				mejor_movimiento = esquinas_disponibles[randi() % len(esquinas_disponibles)]
 			else:
-				var movimientos_libres = []
-				for i in range(9):
-					if borde[i] == "0":
-						movimientos_libres.append(i)
 				mejor_movimiento = movimientos_libres[randi() % len(movimientos_libres)]
 
 		return mejor_puntaje
@@ -362,6 +364,9 @@ func MovimientoComputadora() -> void:
 	elif borde[8] == "Determinacion" && borde[6] == "Determinacion" && solucion == true:
 		mejor_movimiento = 7
 		solucion = false 
+	elif borde[4] == "Determinacion" && borde[5] == "Determinacion" && solucion == true:
+		mejor_movimiento = 3
+		solucion = false
 	## EXCEPCIONES
 	else:
 		for i in range(9):
@@ -369,18 +374,15 @@ func MovimientoComputadora() -> void:
 				borde[i] = "Gato"
 				puntaje = Minimax("Determinacion")
 				borde[i] = "0"
-				if puntaje == 1:
+				if puntaje == 1 || puntaje == 0:
 					#print("puntaje mayor: ", puntaje)
 					mejor_movimiento = i
 					break
 					#Movimientos_Validos.append(i)
 					#if puntaje <= -1:
 					#	break
-				elif puntaje == 0:
-					mejor_movimiento = i
-					break
 				#print(puntaje, " ", i, " ", mejor_puntaje)
-					#print("mejor_movimiento")
+				#print("mejor_movimiento")
 	
 	if mejor_movimiento >= 0:
 		print(mejor_puntaje, " Mejor puntaje")
@@ -388,13 +390,8 @@ func MovimientoComputadora() -> void:
 	#if mejor_movimiento >= 0:
 		borde[mejor_movimiento] = "Gato"
 		var path : String
-		for i in range(9):
-			if (i >= 0 && i <= 2) && mejor_movimiento == i:
-				path = "Zona/Borde/Fila0/Boton" + str(i)
-			elif (i >= 3 && i <= 5) && mejor_movimiento == i:
-				path = "Zona/Borde/Fila1/Boton" + str(i)
-			elif (i >= 6 && i <= 8) && mejor_movimiento == i:
-				path = "Zona/Borde/Fila2/Boton" + str(i)	
+		var fila : int = mejor_movimiento / 3
+		path = "Zona/Borde/Fila" + str(fila) + "/Boton" + str(mejor_movimiento)
 		get_node(path).texture_normal = Gato
 		checar_final()
 		Actualizar_Jugador()
